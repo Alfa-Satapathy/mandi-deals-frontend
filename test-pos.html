@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>POS API Test</title>
+</head>
+<body>
+  <h1>POS API Test</h1>
+  <button onclick="testCreateBill()">Test Create Bill</button>
+  <button onclick="testAddItem()">Test Add Item (requires bill ID)</button>
+  <button onclick="testCompleteSale()">Test Complete Sale</button>
+  <div id="result"></div>
+
+  <script>
+    let billId = null;
+
+    async function testCreateBill() {
+      try {
+        const resp = await fetch('http://localhost:3001/api/pos/create-bill', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            staff_id: 'staff-1',
+            counter_id: 'counter-1'
+          })
+        });
+        const data = await resp.json();
+        billId = data.bill_id;
+        document.getElementById('result').innerHTML += '<p><strong>Bill Created:</strong> ' + JSON.stringify(data, null, 2) + '</p>';
+      } catch(err) {
+        document.getElementById('result').innerHTML += '<p><strong>Error:</strong> ' + err.message + '</p>';
+      }
+    }
+
+    async function testAddItem() {
+      if (!billId) {
+        alert('Please create bill first');
+        return;
+      }
+      try {
+        const resp = await fetch('http://localhost:3001/api/pos/add-item', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bill_id: billId,
+            product_id: 'prod-1',
+            quantity: 5,
+            price: 40
+          })
+        });
+        const data = await resp.json();
+        document.getElementById('result').innerHTML += '<p><strong>Item Added:</strong> ' + JSON.stringify(data, null, 2) + '</p>';
+      } catch(err) {
+        document.getElementById('result').innerHTML += '<p><strong>Error:</strong> ' + err.message + '</p>';
+      }
+    }
+
+    async function testCompleteSale() {
+      if (!billId) {
+        alert('Please create bill first');
+        return;
+      }
+      try {
+        const resp = await fetch('http://localhost:3001/api/pos/complete-transaction', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bill_id: billId,
+            customer_id: null,
+            payment_method: 'cash',
+            points_used: 0,
+            points_earned: 0,
+            allocate_points: false
+          })
+        });
+        const data = await resp.json();
+        document.getElementById('result').innerHTML += '<p><strong>Sale Completed:</strong> ' + JSON.stringify(data, null, 2) + '</p>';
+      } catch(err) {
+        document.getElementById('result').innerHTML += '<p><strong>Error:</strong> ' + err.message + '</p>';
+      }
+    }
+  </script>
+</body>
+</html>
