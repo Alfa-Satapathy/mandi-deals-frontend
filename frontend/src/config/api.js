@@ -1,7 +1,6 @@
 // API configuration with fallback
-// In production (Vercel), use /api (proxied through Vercel functions)
-// In development, use the backend URL from env or default
-export const API_URL = import.meta.env.VITE_API_URL || '/api'
+// Use environment variable or default to Railway backend
+export const API_URL = import.meta.env.VITE_API_URL || 'https://mandi-deals-backend-production.up.railway.app'
 
 export const getApiUrl = (endpoint) => {
   return `${API_URL}${endpoint}`
