@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { API_URL } from './config/api'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import POSPage from './pages/POSPage'
@@ -21,7 +22,7 @@ function App() {
 
   const checkApiHealth = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/health`)
+      const response = await fetch(`${API_URL}/api/health`)
       if (response.ok) {
         setApiStatus('✅ API Connected')
       } else {
