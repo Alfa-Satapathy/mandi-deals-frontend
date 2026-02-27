@@ -1,0 +1,14 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "outputDirectory": "dist",
+  "env": {
+    "VITE_API_URL": "https://mandi-deals-backend-production.up.railway.app"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
