@@ -40,15 +40,15 @@ const SalesAnalytics = () => {
   };
 
   const StatCard = ({ icon, title, value, unit = '' }) => (
-    <div className="bg-white border-2 border-gray-200 rounded-lg p-4 hover:shadow-lg transition">
-      <div className="flex justify-between items-center">
-        <div>
-          <p className="text-gray-600 text-sm">{title}</p>
-          <p className="text-2xl font-bold text-gray-800 mt-1">
-            {value.toLocaleString()} {unit}
+    <div className="bg-white border-2 border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-lg transition">
+      <div className="flex justify-between items-start gap-1">
+        <div className="min-w-0 flex-1">
+          <p className="text-gray-600 text-xs sm:text-sm">{title}</p>
+          <p className="text-base sm:text-2xl font-bold text-gray-800 mt-1">
+            {unit === '₹' && '₹'}{typeof value === 'number' ? value.toLocaleString('en-IN', { maximumFractionDigits: 0 }) : value}{unit !== '₹' && unit && ` ${unit}`}
           </p>
         </div>
-        <div className="text-4xl">{icon}</div>
+        <div className="text-xl sm:text-4xl flex-shrink-0">{icon}</div>
       </div>
     </div>
   );
@@ -58,13 +58,13 @@ const SalesAnalytics = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-50 rounded-lg">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">📈 Sales Analytics Dashboard</h2>
+    <div className="p-4 sm:p-6 bg-gray-50 rounded-lg">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold">📈 Sales Analytics</h2>
         <select
           value={timeRange}
           onChange={(e) => setTimeRange(parseInt(e.target.value))}
-          className="border rounded px-3 py-2"
+          className="border rounded px-3 py-2 text-sm w-full sm:w-auto"
         >
           <option value={7}>Last 7 Days</option>
           <option value={30}>Last 30 Days</option>
@@ -74,7 +74,7 @@ const SalesAnalytics = () => {
       </div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <StatCard 
           icon="💰"
           title="Total Sales"

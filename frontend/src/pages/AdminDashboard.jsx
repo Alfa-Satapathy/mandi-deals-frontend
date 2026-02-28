@@ -136,45 +136,46 @@ function AdminDashboard({ user }) {
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
-          <h1 className="text-4xl font-bold text-gray-900">Admin Dashboard</h1>
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-900">Admin Dashboard</h1>
           {lastRefresh && (
             <p className="text-xs text-gray-500 mt-1">
               Last updated: {lastRefresh.toLocaleTimeString()}
             </p>
           )}
         </div>
-        <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 bg-white px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <label className="flex items-center gap-2 text-xs sm:text-sm font-medium text-gray-700 bg-white px-3 sm:px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
             <input
               type="checkbox"
               checked={autoRefresh}
               onChange={(e) => setAutoRefresh(e.target.checked)}
               className="rounded border-gray-300 w-4 h-4 cursor-pointer"
             />
-            Auto-Refresh ({refreshInterval / 1000}s)
+            <span className="hidden sm:inline">Auto-Refresh ({refreshInterval / 1000}s)</span>
+            <span className="sm:hidden">Auto ({refreshInterval / 1000}s)</span>
           </label>
           <button
             onClick={fetchDashboardData}
             disabled={loading}
-            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition disabled:opacity-50 font-medium text-sm"
+            className="px-3 sm:px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition disabled:opacity-50 font-medium text-xs sm:text-sm whitespace-nowrap"
           >
-            {loading ? 'Refreshing...' : 'Refresh Now'}
+            {loading ? 'Refreshing...' : 'Refresh'}
           </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex space-x-2 border-b border-gray-200">
+      <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-200 -mx-2 px-2 md:mx-0 md:px-0">
         {[
           { id: 'overview', label: 'Overview', icon: BarChart3 },
           { id: 'inventory', label: 'Inventory', icon: Package },
           { id: 'discounts', label: 'Discounts', icon: Tag },
           { id: 'customers', label: 'Customers', icon: Users },
-          { id: 'sales', label: 'Sales Details', icon: DollarSign },
+          { id: 'sales', label: 'Sales', icon: DollarSign },
           { id: 'analytics', label: 'Analytics', icon: TrendingUp },
           { id: 'settings', label: 'Settings', icon: Settings }
         ].map(tab => {
@@ -183,14 +184,14 @@ function AdminDashboard({ user }) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-3 font-medium text-sm transition-colors flex items-center gap-2 ${
+              className={`px-2 sm:px-4 py-2 sm:py-3 font-medium text-xs sm:text-sm transition-colors flex items-center gap-1 sm:gap-2 whitespace-nowrap flex-shrink-0 ${
                 activeTab === tab.id
                   ? 'text-blue-600 border-b-2 border-blue-600'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              <Icon size={18} strokeWidth={2.5} />
-              {tab.label}
+              <Icon size={16} className="sm:w-[18px] sm:h-[18px]" strokeWidth={2.5} />
+              <span className="hidden sm:inline">{tab.label}</span>
             </button>
           )
         })}
@@ -202,29 +203,29 @@ function AdminDashboard({ user }) {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-                <p className="text-gray-600 text-sm">Total Sales</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">₹{stats.totalSales?.toFixed(2) || '0.00'}</p>
-                <p className="text-xs text-gray-500 mt-2">All time</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+              <div className="bg-white p-4 md:p-6 rounded-lg shadow border-l-4 border-blue-500">
+                <p className="text-gray-600 text-xs md:text-sm">Total Sales</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 mt-1 md:mt-2">₹{stats.totalSales?.toFixed(2) || '0.00'}</p>
+                <p className="text-xs text-gray-500 mt-1 md:mt-2">All time</p>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
-                <p className="text-gray-600 text-sm">Total Items Sold</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalItems || 0}</p>
-                <p className="text-xs text-gray-500 mt-2">Products</p>
+              <div className="bg-white p-4 md:p-6 rounded-lg shadow border-l-4 border-green-500">
+                <p className="text-gray-600 text-xs md:text-sm">Items Sold</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 mt-1 md:mt-2">{stats.totalItems || 0}</p>
+                <p className="text-xs text-gray-500 mt-1 md:mt-2">Products</p>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow border-l-4 border-purple-500">
-                <p className="text-gray-600 text-sm">Total Customers</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{stats.totalCustomers || 0}</p>
-                <p className="text-xs text-gray-500 mt-2">Registered</p>
+              <div className="bg-white p-4 md:p-6 rounded-lg shadow border-l-4 border-purple-500">
+                <p className="text-gray-600 text-xs md:text-sm">Customers</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 mt-1 md:mt-2">{stats.totalCustomers || 0}</p>
+                <p className="text-xs text-gray-500 mt-1 md:mt-2">Registered</p>
               </div>
 
-              <div className="bg-white p-6 rounded-lg shadow border-l-4 border-orange-500">
-                <p className="text-gray-600 text-sm">Avg. Order Value</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">₹{stats.avgOrderValue?.toFixed(2) || '0.00'}</p>
-                <p className="text-xs text-gray-500 mt-2">Per transaction</p>
+              <div className="bg-white p-4 md:p-6 rounded-lg shadow border-l-4 border-orange-500">
+                <p className="text-gray-600 text-xs md:text-sm">Avg. Order</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 mt-1 md:mt-2">₹{stats.avgOrderValue?.toFixed(2) || '0.00'}</p>
+                <p className="text-xs text-gray-500 mt-1 md:mt-2">Per transaction</p>
               </div>
             </div>
 
@@ -417,24 +418,24 @@ function AdminDashboard({ user }) {
 
         {/* SETTINGS TAB */}
         {activeTab === 'settings' && (
-          <div className="bg-white rounded-lg shadow p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">System Settings & Configuration</h2>
+          <div className="bg-white rounded-lg shadow p-4 sm:p-6 md:p-8">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">System Settings</h2>
               {!editingSettings ? (
                 <button
                   onClick={() => {
                     setEditingSettings(true)
                     setTempSettings(settings)
                   }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium transition-colors"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base"
                 >
                   ✎ Edit Settings
                 </button>
               ) : (
-                <div className="space-x-2">
+                <div className="flex gap-2">
                   <button
                     onClick={saveSettings}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium transition-colors"
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base"
                   >
                     ✓ Save
                   </button>
@@ -443,7 +444,7 @@ function AdminDashboard({ user }) {
                       setEditingSettings(false)
                       setTempSettings(settings)
                     }}
-                    className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded font-medium transition-colors"
+                    className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded font-medium transition-colors text-sm sm:text-base"
                   >
                     ✕ Cancel
                   </button>
